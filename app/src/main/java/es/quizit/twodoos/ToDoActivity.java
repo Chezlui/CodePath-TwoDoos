@@ -5,24 +5,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
+import com.activeandroid.query.Select;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import es.quizit.twodoos.adapters.TodoItemAdapter;
+import es.quizit.twodoos.models.TodoItem;
 
 public class ToDoActivity extends AppCompatActivity {
 	private static final String TODO_FILE = "todo.txt";
 	private static final int REQUEST_CODE = 1;
-	public static final String TASK_POSITION_ARG = "task_position";
+	public static final String INDEX_EXTRA = "task_position";
 	public static final String TASK_VALUE_ARG = "task_value";
-	ArrayList<String> items;
-	ArrayAdapter<String> itemsAdapter;
+	ArrayList<TodoItem> items;
 	ListView lvItems;
+	private TodoItemAdapter todoItemAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,15 @@ public class ToDoActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_todo);
 
 		lvItems = (ListView) findViewById(R.id.listView);
-		readItems();
-		itemsAdapter = new ArrayAdapter<>(this,
-				android.R.layout.simple_list_item_1, items);
+		items = new ArrayList<TodoItem>();
+		todoItemAdapter = new TodoItemAdapter(this, items);
 
-		lvItems.setAdapter(itemsAdapter);
+		List<TodoItem> queryResults = new Select().from(TodoItem.class)
+				.execute();
+
+		todoItemAdapter.addAll(queryResults);
+
+		lvItems.setAdapter(todoItemAdapter);
 		setupListViewListener();
 	}
 
@@ -42,9 +47,10 @@ public class ToDoActivity extends AppCompatActivity {
 		EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
 		if(etNewItem.getText().length()== 0) return;
 		String itemText = etNewItem.getText().toString();
-		itemsAdapter.add(itemText);
+		TodoItem todoItem = new TodoItem(itemText);
+		todoItem.save();
+		todoItemAdapter.add(todoItem);
 		etNewItem.setText("");
-		writeItems();
 	}
 
 	private void setupListViewListener() {
@@ -52,9 +58,9 @@ public class ToDoActivity extends AppCompatActivity {
 		lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-				items.remove(position);
-				itemsAdapter.notifyDataSetChanged();
-				writeItems();
+				TodoItem item2delete = items.get(position);
+				item2delete.delete();
+				todoItemAdapter.remove(item2delete);
 				return true;
 			}
 		});
@@ -62,42 +68,22 @@ public class ToDoActivity extends AppCompatActivity {
 		lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				TodoItem item2delete = items.get(position);
 				Intent intent = new Intent(getApplicationContext(), EditItemActivity.class);
-				intent.putExtra(TASK_POSITION_ARG, position);
-				intent.putExtra(TASK_VALUE_ARG, itemsAdapter.getItem(position));
+				intent.putExtra(INDEX_EXTRA, item2delete.getId());
 				startActivityForResult(intent, REQUEST_CODE);
 			}
 		});
 	}
 
-	private void readItems() {
-		File filesDir = getFilesDir();
-		File todoFile = new File(filesDir, TODO_FILE);
-		try {
-			items = new ArrayList<String>(FileUtils.readLines(todoFile));
-		} catch (IOException e) {
-			items = new ArrayList<String>();
-		}
-	}
-
-	private void writeItems() {
-		File filesDir = getFilesDir();
-		File todoFile = new File(filesDir, TODO_FILE);
-		try {
-			FileUtils.writeLines(todoFile, items);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-			String edittedTask = data.getExtras().getString(TASK_VALUE_ARG);
-			int position = data.getExtras().getInt(TASK_POSITION_ARG);
-			items.set(position, edittedTask);
-			itemsAdapter.notifyDataSetChanged();
-			writeItems();
+			List<TodoItem> queryResults = new Select().from(TodoItem.class)
+					.execute();
+
+			todoItemAdapter.clear();
+			todoItemAdapter.addAll(queryResults);
 		}
 	}
 }
