@@ -96,6 +96,7 @@ public class ToDoActivity extends AppCompatActivity {
 			String edittedTask = data.getExtras().getString(TASK_VALUE_ARG);
 			int position = data.getExtras().getInt(TASK_POSITION_ARG);
 			items.set(position, edittedTask);
+			itemsAdapter.notifyDataSetChanged();
 			writeItems();
 		}
 	}
