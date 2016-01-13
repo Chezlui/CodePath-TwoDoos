@@ -20,7 +20,53 @@
     <EditText
         android:id="@+id/etEditItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="title"/>
+
+    <EditText
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/etEditDescription"
+        android:hint="description"/>
+
+    <EditText
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/etPickDate"
+        android:hint="pick a date"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:entries="@array/priorities"
+        android:id="@+id/spPriority"
+        android:spinnerMode="dialog"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+        android:entries="@array/status"
+        android:id="@+id/spStatus"
+        android:spinnerMode="dialog"/>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+        android:id="@+id/sbCompletion"
+        android:max="100"
+        android:progress="10"
+        android:indeterminate="false"/>
 
     <Button
         android:id="@+id/btnSaveItem"
@@ -29,6 +75,4 @@
         android:layout_gravity="right"
         android:onClick="onSave"
         android:text="Save"/>
-
-
 </LinearLayout>

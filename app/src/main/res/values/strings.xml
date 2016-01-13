@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">TwoDoos</string>
     <string name="title_activity_edit_item">EditItemActivity</string>
+
+
+    <string-array name="priorities">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+        <item>Right now!!</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>Not started</item>
+        <item>Started</item>
+        <item>Finished</item>
+    </string-array>
+
 </resources>
