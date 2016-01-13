@@ -32,13 +32,13 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/aBRkXOy.gifv' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://s3-eu-west-1.amazonaws.com/quizitmobile/varios/todoApp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+I have some experience with Android so my first challenge has been get used to the Github interface and guidelines.
 
 ## License
 
