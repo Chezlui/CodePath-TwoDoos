@@ -5,7 +5,7 @@ TwoDoos is an android app that allows building a todo list and basic todo items 
 
 Submitted by: **José Luis Martín Romera**
 
-Time spent: **3** hours spent in total
+Time spent: **6** hours spent in total (programming)
 
 ## User Stories
 
@@ -43,7 +43,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 I wanted to implement persistency based on SQLite but since I already have some experience in the field, I prefer to invest the time in learning an ORM system. Hence, I have taken advantage of the ActiveAndroid guide in CodePath and implemented persistency with this system.
 I have linked the behaviour between progress completion and status. If the app is finished, the seekbar goes to 100% and vice versa.
 I tint the calendar icon according to priority.
-If the task is finished, then the calendar is substituted by a check, due date disappears and the task is stroked.
+If the task is finished, then the calendar icon is substituted by a check, due date disappears and the task is stroked.
 
 ## License
 
