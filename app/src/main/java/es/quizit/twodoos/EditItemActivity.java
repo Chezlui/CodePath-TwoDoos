@@ -53,29 +53,20 @@ public class EditItemActivity extends AppCompatActivity {
 		tvCompletion = (TextView) findViewById(R.id.tvCompletion);
 		sbCompletion = (SeekBar) findViewById(R.id.sbCompletion);
 
-
 		spStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 0) {
 					sbCompletion.setProgress(0);
 				}
-
 				if (position == 2) {
 					sbCompletion.setProgress(100);
 				}
 			}
-
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-
 			}
 		});
-
-
-
-
-
 
 		sbCompletion.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -94,12 +85,10 @@ public class EditItemActivity extends AppCompatActivity {
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-
 			}
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-
 			}
 		});
 
