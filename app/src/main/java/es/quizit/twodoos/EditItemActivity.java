@@ -1,24 +1,29 @@
 package es.quizit.twodoos;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-
-import java.util.Date;
+import android.widget.TextView;
 
 import es.quizit.twodoos.models.TodoItem;
 
 public class EditItemActivity extends AppCompatActivity {
 
 	EditText etTitle;
-	EditText etDate;
+	TextView tvDate;
+	private TextView tvCompletion;
+	private Spinner spStatus;
+	private EditText etDescription;
+	private Spinner spPriority;
+	private SeekBar sbCompletion;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,36 +33,87 @@ public class EditItemActivity extends AppCompatActivity {
 				getIntent().getLongExtra(ToDoActivity.INDEX_EXTRA, 0));
 
 		etTitle = (EditText) findViewById(R.id.etEditItem);
-		EditText etDescription = (EditText) findViewById(R.id.etEditDescription);
-		etDate = (EditText) findViewById(R.id.etPickDate);
+		etDescription = (EditText) findViewById(R.id.etEditDescription);
+		tvDate = (TextView) findViewById(R.id.tvDueDate);
 
-		// Callback for the Date Picker
-		final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
-			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				etDate.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
-			}
-		};
-
-		etDate.setClickable(true);
-		etDate.setOnClickListener(new View.OnClickListener() {
+		Button btPickDate = (Button) findViewById(R.id.btnPickDate);
+		btPickDate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				DialogFragment dateFragment = new DatePickerFragment();
+				Bundle bundle = new Bundle();
+				bundle.putInt(DatePickerFragment.DATE_VIEW, tvDate.getId());
+				dateFragment.setArguments(bundle);
 				dateFragment.show(getSupportFragmentManager(), "Pick a date");
 			}
 		});
-		Spinner spPriority = (Spinner) findViewById(R.id.spPriority);
-		Spinner spStatus = (Spinner) findViewById(R.id.spStatus);
-		SeekBar sbCompletion = (SeekBar) findViewById(R.id.sbCompletion);
+
+		spPriority = (Spinner) findViewById(R.id.spPriority);
+		spStatus = (Spinner) findViewById(R.id.spStatus);
+		tvCompletion = (TextView) findViewById(R.id.tvCompletion);
+		sbCompletion = (SeekBar) findViewById(R.id.sbCompletion);
+
+
+		spStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (position == 0) {
+					sbCompletion.setProgress(0);
+				}
+
+				if (position == 2) {
+					sbCompletion.setProgress(100);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
+
+
+
+
+
+
+		sbCompletion.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				tvCompletion.setText("Completion: " + progress + "%");
+
+				// Change status according to completion
+				if (progress == 0) {
+					spStatus.setSelection(0);
+				} else if (progress == 100) {
+					spStatus.setSelection(2);
+				} else {
+					spStatus.setSelection(1);
+				}
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
 
 		if (todoItem != null) {
 			etTitle.setText(todoItem.getTitle());
 			etDescription.setText(todoItem.getDescription());
-			etDate.setText((new Date(todoItem.getDueDate())).toString());
+			if (todoItem.getDueDate() != 0) {
+				tvDate.setText(Utils.convertDate2FriendlyString(todoItem.getDueDate()));
+			} else {
+				tvDate.setText(Utils.convertDate2FriendlyString(System.currentTimeMillis()));
+			}
 			spPriority.setSelection(todoItem.getPriority());
 			spStatus.setSelection(todoItem.getStatus());
-			sbCompletion.setProgress((int) (100 *  todoItem.getCompletion()));
+			sbCompletion.setProgress((int) (100 * todoItem.getCompletion()));
 		}
 	}
 
@@ -69,6 +125,12 @@ public class EditItemActivity extends AppCompatActivity {
 
 		if (todoItem != null) {
 			todoItem.setTitle(etTitle.getText().toString());
+			todoItem.setDescription(etDescription.getText().toString());
+			todoItem.setDueDate(Utils.convertFriendlyDate2Milliseconds(
+					tvDate.getText().toString()));
+			todoItem.setPriority(spPriority.getSelectedItemPosition());
+			todoItem.setStatus(spStatus.getSelectedItemPosition());
+			todoItem.setCompletion(sbCompletion.getProgress() / (float)100);
 			todoItem.save();
 		}
 

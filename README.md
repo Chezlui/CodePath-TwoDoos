@@ -18,27 +18,32 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 * [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
-* [ ] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
-* [ ] Add support for completion due dates for todo items (and display within listview item)
+* [x] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
+* [x] Add support for completion due dates for todo items (and display within listview item)
 * [ ] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
-* [ ] Add support for selecting the priority of each todo item (and display in listview item)
-* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+* [x] Add support for selecting the priority of each todo item (and display in listview item)
+* [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Implemented persistency with ActiveAndroid
+* [x] Show items in a different way attending to completion or prioriy
+* [x] Added a bar to indicate progression linked with the status of the task
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/aBRkXOy.gifv' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://s3-eu-west-1.amazonaws.com/quizitmobile/varios/todoApp2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
 I wanted to implement persistency based on SQLite but since I already have some experience in the field, I prefer to invest the time in learning an ORM system. Hence, I have taken advantage of the ActiveAndroid guide in CodePath and implemented persistency with this system.
+I have linked the behaviour between progress completion and status. If the app is finished, the seekbar goes to 100% and vice versa.
+I tint the calendar icon according to priority.
+If the task is finished, then the calendar is substituted by a check, due date disappears and the task is stroked.
 
 ## License
 
